@@ -17,11 +17,12 @@ Once in the build folder run cmake to compile the project. Make sure you have bu
 
 ```
 cmake ..
+make
 ```
 
 ## Run PTPMonitor
 
-Once the executable is build it should appear in the build folder as "ptp_monitor"
+Once the executable is built it should appear in the build folder as "ptp_monitor"
 To run the monitor you can simple run 
 
 ```
