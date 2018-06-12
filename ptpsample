@@ -1,0 +1,33 @@
+^Cpi@raspberrypi:~/ptp $ sudo cat /etc/ptp/status.txt
+Host info          :  raspberrypi, PID 13185
+Local time         :  Thu May 31 18:57:45 UTC 2018
+Kernel time        :  Thu May 31 18:57:45 GMT 2018
+Interface          :  eth0
+Preset             :  slaveonly
+Transport          :  ipv4, multicast
+Delay mechanism    :  E2E
+Sync mode          :  TWO_STEP
+PTP domain         :  0
+Port state         :  PTP_SLAVE
+Local port ID      :  b827ebfffe66c323(unknown)/1
+Best master ID     :  0016c0fffe087262(unknown)/1
+Best master IP     :  192.168.3.3
+GM priority        :  Priority1 200, Priority2 205, clockClass 6
+Time properties    :  PTP timescale, tracbl: time Y, freq Y, src: GPS(0x20)
+UTC properties     :  UTC valid: Y, UTC offset: 37
+Offset from Master :  0.000433800 s, mean  0.000434837 s, dev  0.000004463 s
+Mean Path Delay    :  0.000144960 s, mean  0.000144332 s, dev  0.000000186 s
+Clock status       :  in control, read-only
+Clock correction   :  3.855 ppm, mean  0.000 ppm, dev  0.000 ppm
+Message rates      :  1/s sync, 1/2s delay, 1/s announce
+TimingService      :  current PTP0, best PTP0, pref PTP0
+TimingServices     :  total 1, avail 1, oper 1, idle 0, in_ctrl 1
+Performance        :  Message RX 3/s, TX 0/s
+Announce received  :  16047
+Sync received      :  16047
+Follow-up received :  16047
+DelayReq sent      :  8027
+DelayResp received :  8026
+State transitions  :  3
+PTP Engine resets  :  1
+
