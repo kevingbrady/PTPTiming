@@ -57,3 +57,5 @@ sudo service ptpd restart
 Once you have the service up and running you can check the /etc/ptp/status.txt folder to see if it is updating values. If so you can run the monitor to see the current offset and path delay information.
 
 If you run the PTPMonitor and it is printing out all zeros then the firewall is probably blocking the service from using the incoming packets from the grandmaster clock. You have to open ports 319 and 320 to get around this
+
+You can run the PTPMonitor using Python or C++, but the C++ implementation provides a better estimate of the cpu usage of the PTPd service
