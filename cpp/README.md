@@ -1,9 +1,5 @@
 # C++ Implementation of File Monitor 
 
-## Build Inotify
-
-Go into the inotify folder and run make to build the library. This library provides a wrapper in c++ so we can monitor files for changes
-
 ## Build PTPMonitor
 
 Create a new build folder to compile the project.
@@ -13,7 +9,7 @@ mkdir build
 cd build
 ```
 
-Once in the build folder run cmake to compile the project. Make sure you have built the inotify library or it will not work. Specify that you want to use the "CMakeLists.txt" folder in the previous directory with two periods ".."
+Once in the build folder run cmake to compile the project. Specify that you want to use the "CMakeLists.txt" folder in the previous directory with two periods ".."
 
 ```
 cmake ..
