@@ -1,1 +1,0 @@
-/usr/bin/c++      CMakeFiles/ptp_sensor.dir/main.cpp.o CMakeFiles/ptp_sensor.dir/PTPSensor.cpp.o  -o ptp_sensor -rdynamic libPTPLogWatcher.a ../inotify_cpp.a -lpthread 

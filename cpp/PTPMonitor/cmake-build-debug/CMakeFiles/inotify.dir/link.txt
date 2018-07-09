@@ -1,2 +1,0 @@
-/usr/bin/ar qc libinotify.a  CMakeFiles/inotify.dir/inotify/InotifyEvent.cpp.o CMakeFiles/inotify.dir/inotify/InotifyManager.cpp.o CMakeFiles/inotify.dir/inotify/InotifyWatch.cpp.o
-/usr/bin/ranlib libinotify.a

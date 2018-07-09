@@ -1,6 +1,0 @@
-/home/kgb/Shared/PyCharmProjects/PTPTiming/cpp/PTPSensor/cmake-build-debug/CMakeFiles/edit_cache.dir
-/home/kgb/Shared/PyCharmProjects/PTPTiming/cpp/PTPSensor/cmake-build-debug/CMakeFiles/inotify.dir
-/home/kgb/Shared/PyCharmProjects/PTPTiming/cpp/PTPSensor/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-/home/kgb/Shared/PyCharmProjects/PTPTiming/cpp/PTPSensor/cmake-build-debug/CMakeFiles/ptp_sensor.dir
-/home/kgb/Shared/PyCharmProjects/PTPTiming/cpp/PTPSensor/cmake-build-debug/CMakeFiles/PTPLogWatcher.dir
-/home/kgb/Shared/PyCharmProjects/PTPTiming/cpp/PTPSensor/cmake-build-debug/CMakeFiles/PTPSensor.dir
