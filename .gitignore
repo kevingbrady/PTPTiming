@@ -1,0 +1,12 @@
+data/
+.idea/
+cpp/PTPMonitor/cmake-build-debug/
+cpp/PTPMonitor/build/
+cpp/PTPSensor/cmake-build-debug/
+cpp/PTPSensor/build/
+
+cpp/PTP*/*.a
+cpp/PTP*/inotify/*.o
+cpp/PTP*/compile*
+cpp/PTP*/*.py
+cpp/PTP*/*.txt
