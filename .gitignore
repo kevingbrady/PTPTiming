@@ -1,8 +1,8 @@
 data/
 .idea/
-cpp/PTPMonitor/cmake-build-debug/
+cpp/PTPMonitor/cmake-build*
 cpp/PTPMonitor/build/
-cpp/PTPSensor/cmake-build-debug/
+cpp/PTPSensor/cmake-build*
 cpp/PTPSensor/build/
 
 cpp/PTP*/*.a

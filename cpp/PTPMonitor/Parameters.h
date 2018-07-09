@@ -1,8 +1,6 @@
 #ifndef PARAMETERS_H
 #define PARAMETERS_H
 
-#include <string>
-
 class Parameters {
 
 	public:

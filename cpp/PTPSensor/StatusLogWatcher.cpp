@@ -2,11 +2,7 @@
 // Created by kgb on 6/1/18.
 //
 
-#include <iostream>
-#include <iomanip>
-#include <fstream>
-#include <sstream>
-#include <sys/stat.h>
+
 #include "StatusLogWatcher.h"
 
 struct stat attrib;
@@ -62,16 +58,19 @@ bool StatusLogWatcher::isServiceRunning(std::string service) {
 	  std::string command = std::string("pgrep -x \"") + service + std::string("\"");
 
       FILE *p = popen(command.c_str(), "r");
-      fread(running, sizeof(char), sizeof(char) * sizeof(running), p);
+      size_t fileSize = fread(running, sizeof(char), sizeof(char) * sizeof(running), p);
+      /*if(!fileSize){
+          std::cout << "Failed to Read Output from PGrep Command" << std::endl;
+      }*/
       fclose (p);
 
       if(*running != '$'){
 
-          std::cout << "PTP Daemon Running ..." << std::endl;
+          std::cout << service + " running ..." << std::endl;
           return true;
       }
 
-      std::cout << "PTP Daemon Not Running or Not Installed ..." << "\n" << "Install or Restart PTP Daemon To Run Monitor" << std::endl;
+      std::cout << service + " not running or not installed ..." << "\n" << "install or restart " + service << std::endl;
       return false;
 
 }

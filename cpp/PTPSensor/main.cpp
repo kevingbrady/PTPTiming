@@ -1,3 +1,5 @@
+#include <string> 
+
 #include "Parameters.h"
 #include "PTPSensor.h"
 
