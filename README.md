@@ -33,7 +33,7 @@ cd /etc/default
 sudo nano ptpd
 ```
 
-Make sure the ptpd file in this fodler looks like this:
+Make sure the ptpd file in this folder looks like this:
 
 ```
 # /etc/default/ptpd
