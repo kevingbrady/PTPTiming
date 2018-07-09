@@ -2,32 +2,34 @@
 // Created by kgb on 6/1/18.
 //
 
-#ifndef PROJECT_PTPMONITOR_H
-#define PROJECT_PTPMONITOR_H
+#ifndef STATUS_LOG_WATCHER_H
+#define STATUS_LOG_WATCHER_H
 
+#include <stdio.h>
 #include <stdio.h>
 #include <iostream>
 #include <iomanip>
 #include <fstream>
 #include <sstream>
 #include <sys/stat.h>
+
 #include "InotifyManager.h"
+#include "Parameters.h"
 
 class StatusLogWatcher : public InotifyEventHandler {
 
 public:
 
-    StatusLogWatcher(std::string filePath, int test_duration, std::string run_type);
+    StatusLogWatcher(std::shared_ptr<Parameters>);
     ~StatusLogWatcher();
     virtual void setupWatcher();
     void get_cpu_temperature();
     void get_cpu_load();
-    bool checkPTPActive();
+    bool isServiceRunning(std::string);
 	virtual void everyAnnounceMessage(double&);
     bool handle(InotifyEvent &e) override;
 
 	double cpu_load_percentage, cpu_temperature;
-
 private:
 
     InotifyManager m;
@@ -43,4 +45,4 @@ private:
 };
 
 
-#endif //PROJECT_PTPMONITOR_H
+#endif //STATUS_LOG_WATCHER_H

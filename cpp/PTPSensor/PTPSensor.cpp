@@ -1,14 +1,15 @@
 #include "PTPSensor.h"
 
-PTPSensor::PTPSensor(int duration) : StatusLogWatcher("/etc/ptp/status.txt", duration, "live") {
+PTPSensor::PTPSensor(std::shared_ptr<Parameters> params) : StatusLogWatcher(params) {
 
 		this->sensor_value = 0;
 		this->cpu_temperature = 0;
 		this->cpu_load_percentage = 0;
 
-		if(this->checkPTPActive()){
+		if(this->isServiceRunning("ptpd")){
 
-		    this->setupWatcher();
+            std::cout << "Starting Sensor ..." << "\n\n" << std::endl;;
+            this->setupWatcher();
 
 		}
 }

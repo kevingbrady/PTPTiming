@@ -46,7 +46,7 @@ int main(int argc, char *argv[]){
     StatusLogWatcher ptpWatcher(params);
     if(ptpWatcher.isServiceRunning("ptpd")){
 
-        std::cout << "PTP Daemon Running ..." << "\n" << "Starting Monitor ..." << "\n\n" << std::endl;
+        std::cout << "Starting Monitor ..." << "\n\n" << std::endl;
 		ptpWatcher.setupWatcher();
 
 	}

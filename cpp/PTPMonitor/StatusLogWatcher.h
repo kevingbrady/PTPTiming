@@ -6,6 +6,12 @@
 #define STATUS_LOG_WATCHER_H
 
 #include <stdio.h>
+#include <iostream>
+#include <iomanip>
+#include <fstream>
+#include <sstream>
+#include <sys/stat.h>
+
 #include "InotifyManager.h"
 #include "Parameters.h"
 

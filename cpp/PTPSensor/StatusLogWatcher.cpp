@@ -2,22 +2,35 @@
 // Created by kgb on 6/1/18.
 //
 
+#include <iostream>
+#include <iomanip>
+#include <fstream>
+#include <sstream>
+#include <sys/stat.h>
 #include "StatusLogWatcher.h"
 
 struct stat attrib;
 
-StatusLogWatcher::StatusLogWatcher(std::string filePath, int test_duration, std::string run_type) : filePath(filePath), test_duration(test_duration), run_type(run_type){
+StatusLogWatcher::StatusLogWatcher(std::shared_ptr<Parameters> params) : filePath(params->filePath), test_duration(params->total), run_type(params->run_type){
 
 
     this->start = 0;
 	this->last_modify = 0;
 	this->announce_message_count = 0;
 
+	if(this->test_duration == 0){
+	
+			this->test_duration = 10;
+	}
+
     if(this->run_type == "file"){
 
         this->outputFile = new std::ofstream("ptp_monitor.txt");
         this->output = "";
     }
+
+    std::cout << "Days: " << params->days << " Hours: " << params->hours << " Minutes: " << params->minutes << " Seconds: " << params->seconds << " Total Seconds: " << this->test_duration << " Run Type: " << this->run_type << "\n" << std::endl;
+
 }
 
 StatusLogWatcher::~StatusLogWatcher(void){
@@ -42,18 +55,19 @@ void StatusLogWatcher::setupWatcher(){
 
 }
 
-bool StatusLogWatcher::checkPTPActive() {
+bool StatusLogWatcher::isServiceRunning(std::string service) {
 
 
       char running[1] = {'$'};
+	  std::string command = std::string("pgrep -x \"") + service + std::string("\"");
 
-      //FILE * p = popen("../ptpd_running", "r");
-      FILE *p = popen("pgrep -x \"ptpd\"", "r");
+      FILE *p = popen(command.c_str(), "r");
       fread(running, sizeof(char), sizeof(char) * sizeof(running), p);
       fclose (p);
 
       if(*running != '$'){
 
+          std::cout << "PTP Daemon Running ..." << std::endl;
           return true;
       }
 
@@ -182,7 +196,7 @@ bool StatusLogWatcher::handle(InotifyEvent &e){
             this->offset = std::atof(offsetString.c_str());
             this->offset_mean = std::atof(offsetMeanString.c_str());
             this->offset_std = std::atof(offsetSTDString.c_str());
-            this->GM = last_modify - this->offset;
+            this->GM = last_modify; //- this->offset;
 
         }
 

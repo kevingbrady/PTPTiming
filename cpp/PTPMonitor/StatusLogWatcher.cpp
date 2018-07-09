@@ -2,11 +2,7 @@
 // Created by kgb on 6/1/18.
 //
 
-#include <iostream>
-#include <iomanip>
-#include <fstream>
-#include <sstream>
-#include <sys/stat.h>
+
 #include "StatusLogWatcher.h"
 
 struct stat attrib;
@@ -67,6 +63,7 @@ bool StatusLogWatcher::isServiceRunning(std::string service) {
 
       if(*running != '$'){
 
+          std::cout << "PTP Daemon Running ..." << std::endl;
           return true;
       }
 

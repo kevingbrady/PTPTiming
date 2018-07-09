@@ -7,12 +7,13 @@
 
 #include <cstdlib>
 #include "StatusLogWatcher.h"
+#include "Parameters.h"
 
 class PTPSensor : public StatusLogWatcher {
 
 public:
 
-	PTPSensor(int);
+	PTPSensor(std::shared_ptr<Parameters>);
 	~PTPSensor();
 	void everyAnnounceMessage(double&) override;
     
