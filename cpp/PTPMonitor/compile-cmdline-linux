@@ -1,4 +1,0 @@
-#!/bin/bash
-
-g++ -std=c++11 -o ptp_monitor main.cpp StatusLogWatcher.cpp -I./inotify inotify_cpp.a -lpthread
-
