@@ -1,0 +1,1 @@
+/usr/bin/c++      CMakeFiles/ptp_monitor.dir/main.cpp.o CMakeFiles/ptp_monitor.dir/StatusLogWatcher.cpp.o  -o ptp_monitor -rdynamic ../inotify_cpp.a -lpthread 

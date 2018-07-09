@@ -1,0 +1,5 @@
+/home/kgb/Shared/PyCharmProjects/PTPTiming/cpp/PTPMonitor/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/kgb/Shared/PyCharmProjects/PTPTiming/cpp/PTPMonitor/cmake-build-debug/CMakeFiles/inotify.dir
+/home/kgb/Shared/PyCharmProjects/PTPTiming/cpp/PTPMonitor/cmake-build-debug/CMakeFiles/PTPLogWatcher.dir
+/home/kgb/Shared/PyCharmProjects/PTPTiming/cpp/PTPMonitor/cmake-build-debug/CMakeFiles/ptp_monitor.dir
+/home/kgb/Shared/PyCharmProjects/PTPTiming/cpp/PTPMonitor/cmake-build-debug/CMakeFiles/edit_cache.dir

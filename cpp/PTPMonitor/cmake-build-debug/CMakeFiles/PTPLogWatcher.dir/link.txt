@@ -1,0 +1,2 @@
+/usr/bin/ar qc libPTPLogWatcher.a  CMakeFiles/PTPLogWatcher.dir/StatusLogWatcher.cpp.o
+/usr/bin/ranlib libPTPLogWatcher.a

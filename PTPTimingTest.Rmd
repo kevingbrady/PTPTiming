@@ -1,0 +1,255 @@
+---
+title: "PTPTimingTest"
+author: "Kevin Brady Jr"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# PTP Timing Test {.tabset .tabset-fade .tabset-pills}
+
+```{r echo=FALSE, include=FALSE}
+library(lubridate)
+
+directory = 'data/2018/(6-25)to(6-26)'
+test_data <- as.data.frame(read.table(paste(directory, "ptp_monitor.txt", sep="/"), sep = ',', strip.white = TRUE))
+
+# Set Column Names in Data Frame
+colnames(test_data)[colnames(test_data)=="V1"] <- "GM"
+colnames(test_data)[colnames(test_data)=="V2"] <- "Offset"
+colnames(test_data)[colnames(test_data)=="V3"] <- "Offset_Mean"
+colnames(test_data)[colnames(test_data)=="V4"] <- "Offset_STD"
+colnames(test_data)[colnames(test_data)=="V5"] <- "Path_Delay"
+colnames(test_data)[colnames(test_data)=="V6"] <- "Path_Delay_Mean"
+colnames(test_data)[colnames(test_data)=="V7"] <- "Path_Delay_STD"
+colnames(test_data)[colnames(test_data)=="V8"] <- "CPUTemperature"
+colnames(test_data)[colnames(test_data)=="V9"] <- "CPULoad"
+
+test_data$GM <- as.POSIXct(test_data$GM,  origin='1970-1-1')
+
+remove_outliers <- function(x, na.rm = TRUE, ...) {
+  qnt <- quantile(x, probs=c(.25, .75), na.rm = na.rm, ...)
+  H <- 1.5 * IQR(x, na.rm = na.rm)
+  y <- x
+  y[x < (qnt[1] - H)] <- NA
+  y[x > (qnt[2] + H)] <- NA
+  y
+}
+
+```
+
+## Total Test Time
+
+```{r echo=FALSE }
+total_time <- round(test_data$GM[length(test_data$GM)] - min(test_data$GM, na.rm = TRUE))
+print(total_time)
+```
+
+## CPU Temperature
+
+```{r echo=FALSE}
+m <- matrix(c(test_data$GM, test_data$CPUTemperature), nrow=length(test_data$GM), ncol = 2)
+
+xmin <- as.POSIXct(min(m[,1], na.rm = TRUE), origin= '1970-1-1')
+xmax <- as.POSIXct(max(m[,1], na.rm = TRUE), origin= '1970-1-1')
+xseq <- seq.POSIXt(xmin, xmax, by = total_time/12) 
+
+ymin <- 30
+ymax <- 50
+
+
+plot(m[,2] ~ m[,1], type = 'l', main = 'CPU Temperature over Time', xaxt = 'n', ylab = 'CPU Board Temperature (C)', xlab = 'Time (UTC)', col = 'blue',  ylim = c(ymin,ymax), xlim = c(xmin,xmax))
+axis.POSIXct(side = 1, at= xseq, labels= TRUE, format= '%m-%d %H:%M:%S', cex.lab = 3 , cex.axis = 0.8)
+
+```
+
+## CPU Processor Load
+
+```{r echo=FALSE}
+
+m <- matrix(c(test_data$GM, test_data$CPULoad), nrow=length(test_data$GM), ncol = 2)
+
+xmin <- as.POSIXct(min(m[,1], na.rm = TRUE), origin= '1970-1-1')
+xmax <- as.POSIXct(max(m[,1], na.rm = TRUE), origin= '1970-1-1')
+xseq <- seq.POSIXt(xmin, xmax, by = total_time/12) 
+
+ymin <- 0
+ymax <- 100
+
+
+plot(m[,2] ~ m[,1], type = 'l', main = 'CPU Processor Load over Time', xaxt = 'n', ylab = 'Estimated Processor Load (%)', xlab = 'Time (UTC)', col = 'blue',  ylim = c(ymin,ymax), xlim=c(xmin, xmax))
+axis.POSIXct(side = 1, at= xseq, labels= TRUE, format= '%m-%d %H:%M:%S', cex.lab = 3 , cex.axis = 0.8)
+
+```
+
+## Clock Offset from Grandmaster
+
+### Total Test Time
+```{r echo = FALSE}
+
+#convert to microseconds
+test_data$Offset <- test_data$Offset * 1000000
+
+m <- matrix(c(test_data$GM, test_data$Offset), nrow=length(test_data$Offset), ncol = 2)
+
+xmin <- as.POSIXct(min(m[,1], na.rm = TRUE), origin= '1970-1-1')
+xmax <- as.POSIXct(max(m[,1], na.rm = TRUE), origin= '1970-1-1')
+xseq <- seq.POSIXt(xmin, xmax, by = total_time/12) 
+
+ymin <- -100
+ymax <- 100
+
+plot(m[,2] ~ m[,1], type = 'l', main = 'System Clock Offset over Time (w/ outliers)', xaxt = 'n',  ylab = 'System Clock Offset (us)', xlab = 'Time (UTC)', col = 'blue',  ylim = c(ymin,ymax), xlim = c(xmin, xmax))
+axis.POSIXct(side = 1, at= xseq, labels= TRUE, format= '%m-%d %H:%M:%S', cex.lab = 3 , cex.axis = 0.8)
+
+test_data$Offset_clean <- remove_outliers(test_data$Offset)
+
+m <- matrix(c(test_data$GM, test_data$Offset_clean), nrow=length(test_data$Offset_clean), ncol = 2)
+
+ymin <- -100
+ymax <- 100
+
+plot(m[,2] ~ m[,1], type = 'l', main = 'System Clock Offset over Time (w/o outliers)', xaxt = 'n',  ylab = 'System Clock Offset (us)', xlab = 'Time (UTC)', col = 'blue',  ylim = c(ymin,ymax), xlim = c(xmin, xmax))
+axis.POSIXct(side = 1, at= xseq, labels= TRUE, format= '%m-%d %H:%M:%S', cex.lab = 3 , cex.axis = 0.8)
+
+
+```
+
+### First Hour
+
+```{r echo = FALSE}
+
+xmin = min(test_data$GM)
+
+xmax = test_data$GM[as.integer(difftime(test_data$GM, min(test_data$GM), units="secs")) == 3600]
+
+xseq <- seq.POSIXt(xmin, xmax, by = total_time/48) 
+
+ymin <- 0
+ymax <- 500
+
+GMSubset <- test_data$GM[which(test_data$GM < xmax)]
+OffsetSubset <- test_data$Offset[which(test_data$GM < xmax)]
+
+s <- matrix(c(GMSubset, OffsetSubset), nrow=length(GMSubset), ncol = 2)
+plot(s[,2] ~ s[,1], type = 'l', main = 'System Clock Offset over First Hour', xaxt = 'n', ylab = 'System Clock Offset (us)', xlab = 'Time (UTC)', col = 'blue',  ylim = c(ymin,ymax), xlim = c(xmin, xmax))
+axis.POSIXct(side = 1, at= xseq, labels= TRUE, format= '%m-%d %H:%M:%S', cex.lab = 3 , cex.axis = 0.8)
+
+```
+
+## Path Delay 
+
+```{r echo=FALSE}
+test_data$Path_Delay <- test_data$Path_Delay * 1000
+
+xmin <- as.POSIXct(min(m[,1], na.rm = TRUE), origin= '1970-1-1')
+xmax <- as.POSIXct(max(m[,1], na.rm = TRUE), origin= '1970-1-1')
+xseq <- seq.POSIXt(xmin, xmax, by = total_time/12) 
+
+ymin <- 0
+ymax <- 1
+
+m <- matrix(c(test_data$GM, test_data$Path_Delay), nrow=length(test_data$GM), ncol = 2)
+plot(m[,2] ~ m[,1], type = 'l', main = 'Path Delay over Time', xaxt = 'n', ylab = 'Path Delay (ms)', xlab = 'Time (UTC)', col = 'blue',  ylim = c(ymin,ymax), xlim = c(xmin, xmax))
+axis.POSIXct(side = 1, at= xseq, labels= TRUE, format= '%m-%d %H:%M:%S', cex.lab = 3 , cex.axis = 0.8)
+```
+
+## Mean
+
+```{r echo=FALSE}
+
+test_data$Offset_Mean <- test_data$Offset_Mean * 1000000
+
+xmin <- as.POSIXct(min(m[,1], na.rm = TRUE), origin= '1970-1-1')
+xmax <- as.POSIXct(max(m[,1], na.rm = TRUE), origin= '1970-1-1')
+xseq <- seq.POSIXt(xmin, xmax, by = total_time/12) 
+
+ymin <- -100
+ymax <- 100
+
+m <- matrix(c(test_data$GM, test_data$Offset_Mean), nrow=length(test_data$GM), ncol = 2)
+plot(m[,2] ~ m[,1], type = 'l', main = 'Mean Clock Offset over Time', xaxt = 'n', ylab = 'Mean Clock Offset (us)', xlab = 'Time (UTC)', col = 'blue',  ylim = c(ymin,ymax), xlim = c(xmin, xmax))
+axis.POSIXct(side = 1, at= xseq, labels= TRUE, format= '%m-%d %H:%M:%S', cex.lab = 3 , cex.axis = 0.8)
+
+```
+
+```{r echo=FALSE}
+
+test_data$Path_Delay_Mean <- test_data$Path_Delay_Mean * 1000
+
+xmin <- as.POSIXct(min(m[,1], na.rm = TRUE), origin= '1970-1-1')
+xmax <- as.POSIXct(max(m[,1], na.rm = TRUE), origin= '1970-1-1')
+xseq <- seq.POSIXt(xmin, xmax, by = total_time/12) 
+
+ymin <- 0
+ymax <- 1
+
+m <- matrix(c(test_data$GM, test_data$Path_Delay_Mean), nrow=length(test_data$GM), ncol = 2)
+plot(m[,2] ~ m[,1], type = 'l', main = 'Mean Path Delay over Time', xaxt = 'n', ylab = 'Mean Path Delay (ms)', xlab = 'Time (UTC)', col = 'blue',  ylim = c(ymin,ymax), xlim = c(xmin, xmax))
+axis.POSIXct(side = 1, at= xseq, labels= TRUE, format= '%m-%d %H:%M:%S', cex.lab = 3 , cex.axis = 0.8)
+
+```
+
+## Standard Deviation
+
+### Clock Offset Dataset Standard Deviation
+
+```{r echo = FALSE}
+print(sd(test_data$Offset))
+```
+
+```{r echo=FALSE}
+test_data$Offset_STD <- test_data$Offset_STD * 1000000
+
+xmin <- as.POSIXct(min(m[,1], na.rm = TRUE), origin= '1970-1-1')
+xmax <- as.POSIXct(max(m[,1], na.rm = TRUE), origin= '1970-1-1')
+xseq <- seq.POSIXt(xmin, xmax, by = total_time/12) 
+
+ymin <- 0
+ymax <- 100
+
+m <- matrix(c(test_data$GM, test_data$Offset_STD), nrow=length(test_data$GM), ncol = 2)
+plot(m[,2] ~ m[,1], type = 'l', main = 'Clock Offset Standard Deviation over Time (w/ outliers)', xaxt = 'n', ylab = 'Standard Deviation (us)', xlab = 'Time (UTC)', col = 'blue',  ylim = c(ymin,ymax), xlim = c(xmin, xmax))
+axis.POSIXct(side = 1, at= xseq, labels= TRUE, format= '%m-%d %H:%M:%S', cex.lab = 3 , cex.axis = 0.8)
+
+test_data$Offset_STD_clean <- remove_outliers(test_data$Offset_STD)
+m <- matrix(c(test_data$GM, test_data$Offset_STD_clean), nrow=length(test_data$Offset_STD_clean), ncol = 2)
+
+plot(m[,2] ~ m[,1], type = 'l', main = 'Clock Offset Standard Deviation over Time (w/o outliers)', xaxt = 'n', ylab = 'Standard Deviation (us)', xlab = 'Time (UTC)', col = 'blue',  ylim = c(ymin,ymax), xlim = c(xmin, xmax))
+axis.POSIXct(side = 1, at= xseq, labels= TRUE, format= '%m-%d %H:%M:%S', cex.lab = 3 , cex.axis = 0.8)
+
+```
+
+### Path Delay Dataset Standard Deviation
+
+```{r echo = FALSE}
+print(sd(test_data$Path_Delay))
+```
+
+```{r echo=FALSE}
+test_data$Path_Delay_STD <- test_data$Path_Delay_STD * 1000
+
+xmin <- as.POSIXct(min(m[,1], na.rm = TRUE), origin= '1970-1-1')
+xmax <- as.POSIXct(max(m[,1], na.rm = TRUE), origin= '1970-1-1')
+xseq <- seq.POSIXt(xmin, xmax, by = total_time/12) 
+
+ymin <- 0
+ymax <- 0.001
+
+m <- matrix(c(test_data$GM, test_data$Path_Delay_STD), nrow=length(test_data$GM), ncol = 2)
+plot(m[,2] ~ m[,1], type = 'l', main = 'Path Delay Standard Deviation over Time', xaxt = 'n', ylab = 'Standard Deviation (ms)', xlab = 'Time (UTC)', col = 'blue',  ylim = c(ymin,ymax), xlim = c(xmin, xmax))
+axis.POSIXct(side = 1, at= xseq, labels= TRUE, format= '%m-%d %H:%M:%S', cex.lab = 3 , cex.axis = 0.8)
+
+```
+
+## Allan Variance
+
+```{r echo=TRUE, warning=FALSE}
+library(allanvar)
+
+allan <- avar((test_data$Offset), frequency(test_data))
+plotav(allan)
+```

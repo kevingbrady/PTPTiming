@@ -1,0 +1,3 @@
+#!/bin/bash
+
+sudo nohup build/ptp_monitor -hours 12 -run_type file >/dev/null 2>&1 &

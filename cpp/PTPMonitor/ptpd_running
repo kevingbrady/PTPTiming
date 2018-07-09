@@ -1,0 +1,12 @@
+#!/bin/bash
+
+# Check if ptpd is running
+# -x flag only match processes whose name (or command line if -f is
+# specified) exactly match the pattern.
+
+if ! pgrep -x "ptpd" > /dev/null
+then
+    echo "0"
+else
+    echo "1"
+fi

@@ -1,0 +1,4 @@
+/home/pi/ptp/cpp/PTPMonitor/build/CMakeFiles/rebuild_cache.dir
+/home/pi/ptp/cpp/PTPMonitor/build/CMakeFiles/edit_cache.dir
+/home/pi/ptp/cpp/PTPMonitor/build/CMakeFiles/ptp_monitor.dir
+/home/pi/ptp/cpp/PTPMonitor/build/CMakeFiles/inotify.dir

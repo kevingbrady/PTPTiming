@@ -1,0 +1,2 @@
+/usr/bin/ar qc libPTPSensor.a  CMakeFiles/PTPSensor.dir/PTPSensor.cpp.o
+/usr/bin/ranlib libPTPSensor.a
